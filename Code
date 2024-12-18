@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <random>
+
+int main() {
+    int length, useUpper, useLower, useDigits, useSpecial;
+    std::string charset;
+
+    std::cout << "Введите длину пароля (от 6 до 32): ";
+    std::cin >> length;
+    
+    std::cout << "Включить заглавные буквы? (1 - да, 2 - нет): ";
+    std::cin >> useUpper; 
+    if (useUpper == 1) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    
+    std::cout << "Включить строчные буквы? (1 - да, 2 - нет): ";
+    std::cin >> useLower;
+    if (useLower == 1) charset += "abcdefghijklmnopqrstuvwxyz";
+    
+    std::cout << "Включить цифры? (1 - да, 2 - нет): ";
+    std::cin >> useDigits;
+    if (useDigits == 1) charset += "0123456789";
+    
+    std::cout << "Включить специальные символы? (1 - да, 2 - нет): ";
+    std::cin >> useSpecial;
+    if (useSpecial == 1) charset += "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
+    if (charset.empty()) {
+        std::cerr << "Ошибка: Должен быть выбран хотя бы один набор символов." << std::endl;
+        return 1;
+    }
+
+    std::string password;
+    std::random_device rd;
+    std::mt19937 generator(rd());
+    std::uniform_int_distribution<> distribution(0, charset.size() - 1);
+
+    for (int i = 0; i < length; ++i) {
+        password += charset[distribution(generator)];
+    }
+
+    std::cout << "Сгенерированный пароль: " << password << std::endl;
+    return 0;
+}
